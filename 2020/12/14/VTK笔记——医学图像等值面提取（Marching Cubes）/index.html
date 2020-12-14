@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="什么是等值面引用维基百科的解释：  等值曲面是一种曲面。在空间里，假若，每一点都有一个设定的值。这值可能是压力、温度、速度、密度。那么，一个等值曲面所包含的每一个点，其设定值是一样的。换句话说，以三维空间为定义域的连续函数，其每一个水平集都是一个等值曲面。   应用计算机图形学，我们可以简易地显示出等值曲面的线框图或明暗图。在计算流体力学里，数据视觉化方法时常会用等值曲面来表示流体（液体或气体）流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndyJMR&#39;s Blog">
+<meta property="og:url" content="http://example.com/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E7%AD%89%E5%80%BC%E9%9D%A2%E6%8F%90%E5%8F%96%EF%BC%88Marching%20Cubes%EF%BC%89/index.html">
+<meta property="og:site_name" content="AndyJMR&#39;s Blog">
+<meta property="og:description" content="什么是等值面引用维基百科的解释：  等值曲面是一种曲面。在空间里，假若，每一点都有一个设定的值。这值可能是压力、温度、速度、密度。那么，一个等值曲面所包含的每一个点，其设定值是一样的。换句话说，以三维空间为定义域的连续函数，其每一个水平集都是一个等值曲面。   应用计算机图形学，我们可以简易地显示出等值曲面的线框图或明暗图。在计算流体力学里，数据视觉化方法时常会用等值曲面来表示流体（液体或气体）流">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200119112210123.gif">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200119112703319.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-12-14T05:28:25.497Z">
+<meta property="article:modified_time" content="2020-01-19T03:33:48.056Z">
+<meta property="article:author" content="AndyJMR">
+<meta property="article:tag" content="VTK">
+<meta property="article:tag" content="等值面">
+<meta property="article:tag" content="Marching Cubes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200119112210123.gif">
+
+
+<link rel="canonical" href="http://example.com/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E7%AD%89%E5%80%BC%E9%9D%A2%E6%8F%90%E5%8F%96%EF%BC%88Marching%20Cubes%EF%BC%89/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title> | AndyJMR's Blog</title>
+  
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">AndyJMR's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%AD%89%E5%80%BC%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">什么是等值面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%89%E5%80%BC%E9%9D%A2%E7%94%9F%E6%88%90"><span class="nav-number">2.</span> <span class="nav-text">等值面生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Marching-Cubes%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">Marching Cubes的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vtk%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">vtk实现类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MarchingCubes-cxx"><span class="nav-number">5.</span> <span class="nav-text">MarchingCubes.cxx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ref"><span class="nav-number">6.</span> <span class="nav-text">Ref</span></a></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">AndyJMR</p>
+  <div class="site-description" itemprop="description">不积跬步，无以至千里；不积小流，无以成江海。</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E7%AD%89%E5%80%BC%E9%9D%A2%E6%8F%90%E5%8F%96%EF%BC%88Marching%20Cubes%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="AndyJMR">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyJMR's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-14 13:28:25" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-01-19 11:33:48" itemprop="dateModified" datetime="2020-01-19T11:33:48+08:00">2020-01-19</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/VTK%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">VTK笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="什么是等值面"><a href="#什么是等值面" class="headerlink" title="什么是等值面"></a>什么是等值面</h2><p>引用维基百科的解释：</p>
+<blockquote>
+<p>等值曲面是一种曲面。在空间里，假若，每一点都有一个设定的值。这值可能是压力、温度、速度、密度。那么，一个等值曲面所包含的每一个点，其设定值是一样的。换句话说，以三维空间为定义域的连续函数，其每一个水平集都是一个等值曲面。</p>
+</blockquote>
+<blockquote>
+<p>应用计算机图形学，我们可以简易地显示出等值曲面的线框图或明暗图。在计算流体力学里，数据视觉化方法时常会用等值曲面来表示流体（液体或气体）流过物体时的瞬时状态。这是工程师研究发展新科技的一个利器。他们可以观察一个系统在任何时间的状态，从而发现其中奥秘。例如，等值曲面可以代表超音速飞行的单独震波。或者，我们可以制造几个等值曲面来代表，当空气流过飞机翅膀时，随着时间演变的一系列压力值。</p>
+</blockquote>
+<blockquote>
+<p>面对着一大堆三维空间的数据，一个明智又受欢迎的选择，就是采用等值曲面为数据视觉化的主要形式。简单的多边形造型渲染的等值曲面，不需要用到很多的中央处理单元的资源，就能够迅速的计算出所要显示的图形。</p>
+</blockquote>
+<blockquote>
+<p>在医学影像里，三维的电脑断层扫描用等值曲面来代表一个密度值区的部位。这样，我们可以将内部器官、骨头、等等，这些结构视觉化。</p>
+</blockquote>
+<p>简单的来说，我们可以使用等值面技术可视化感兴趣的区域，比如皮肤，骨骼等。</p>
+<h2 id="等值面生成"><a href="#等值面生成" class="headerlink" title="等值面生成"></a>等值面生成</h2><p>等值面可视化的三种技术，体绘制，移动立方体（Marching Cubes）和部分立方体（Dividing Cubes）.<br>这篇笔记主要记录的是移动立方体（Marching Cubes）.</p>
+<h2 id="Marching-Cubes的原理"><a href="#Marching-Cubes的原理" class="headerlink" title="Marching Cubes的原理"></a>Marching Cubes的原理</h2><blockquote>
+<p>Marching Cubes（移动立方体）方法是由W.E.Lorenson和H.E.Cline在1987年提出来的。由于这一方法原理简单，易于实现，目前已经得到了较为广泛的应用，成为三维数据等值面生成的经典算法，Marching Cubes算法又简称为MC算法。</p>
+</blockquote>
+<blockquote>
+<p>在Marching Cubes方法中，假定原始数据是离散的三维空间规则数据，一个体元定义为由相邻层上的8个顶点组成的一个长方体。为了在三维数据中构造等值面，应先给定所求等值面的值，该方法的基本原理是逐个处理所有的体元，将体元各顶点处的值与给定的阈值进行比较，首先找出与等值面相交的体元，然后通过插值求等值面与体元棱边的交点，并将各交点连成三角形来构成等值面片，所有体元中的三角形集合就构成了等值面。由于这一方法是逐个处理所有的体元，因此被称为Marching Cubes方法。</p>
+</blockquote>
+<p>关于Marching Cubes原理的详细解释。有兴趣可以参考Lorensen, W. E. and Cline, H. E., “<a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/202232897_Marching_Cubes_A_High_Resolution_3D_Surface_Construction_Algorithm">Marching Cubes: A High Resolution 3D Surface Construction Algorithm</a>,” Computer Graphics, vol. 21, no. 3, pp. 163-169, July 1987.</p>
+<h2 id="vtk实现类"><a href="#vtk实现类" class="headerlink" title="vtk实现类"></a>vtk实现类</h2><p>在vtk中实现Marching Cubes的算法类有很多，如vtkMarchingCubes,vtkSliceCubes,vtkMarchingSquares,vtkImageMarchingCubes等,它们是针对特定数据集类型而定义的。<br><strong>vtkMarchingCubes</strong><br>vtkMarchingCubes用于提取体数据。</p>
+<blockquote>
+<p>generate isosurface(s) from volume</p>
+</blockquote>
+<blockquote>
+<p>vtkMarchingCubes is a filter that takes as input a volume (e.g., 3D structured point set) and generates on output one or more isosurfaces. One or more contour values must be specified to generate the isosurfaces. Alternatively, you can specify a min/max scalar range and the number of contours to generate a series of evenly spaced contour values.</p>
+</blockquote>
+<p><strong>vtkContourFilter</strong><br>vtkContourFilter根据特定的数据集类型自动创建一个最快的子类方法。</p>
+<blockquote>
+<p>generate isosurfaces/isolines from scalar values</p>
+</blockquote>
+<blockquote>
+<p>vtkContourFilter is a filter that takes as input any dataset and generates on output isosurfaces and/or isolines. The exact form of the output depends upon the dimensionality of the input data. Data consisting of 3D cells will generate isosurfaces, data consisting of 2D cells will generate isolines, and data with 1D or 0D cells will generate isopoints. Combinations of output type are possible if the input dimension is mixed.</p>
+</blockquote>
+<blockquote>
+<p>To use this filter you must specify one or more contour values. You can either use the method SetValue() to specify each contour value, or use GenerateValues() to generate a series of evenly spaced contours. It is also possible to accelerate the operation of this filter (at the cost of extra memory) by using a vtkScalarTree. A scalar tree is used to quickly locate cells that contain a contour surface. This is especially effective if multiple contours are being extracted. If you want to use a scalar tree, invoke the method UseScalarTreeOn().</p>
+</blockquote>
+<p>下面示例一个生成头部数据皮肤和骨骼的方法。<br><img src="https://img-blog.csdnimg.cn/20200119112210123.gif" alt="在这里插入图片描述"><br>The example uses <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/lorensen/VTKExamples/master/src/Testing/Data/FullHead.mhd">FullHead.mhd</a> which references <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/lorensen/VTKExamples/master/src/Testing/Data/FullHead.mhd">FullHead.raw.gz</a>.</p>
+<h2 id="MarchingCubes-cxx"><a href="#MarchingCubes-cxx" class="headerlink" title="MarchingCubes.cxx"></a>MarchingCubes.cxx</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkSmartPointer.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkMetaImageReader.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkMarchingCubes.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkContourFilter.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkStripper.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkPolyDataNormals.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkPolyDataMapper.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkActor.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkProperty.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkRenderer.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkRenderWindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkRenderWindowInteractor.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkOutlineFilter.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;vtkNamedColors.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;array&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (argc &lt; <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Usage: &quot;</span> &lt;&lt; argv[<span class="number">0</span>] &lt;&lt; <span class="string">&quot; FullHead.mhd&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> EXIT_FAILURE;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> colors = vtkSmartPointer&lt;vtkNamedColors&gt;::New();</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">array</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">char</span>, 4&gt; skinColor&#123; &#123;<span class="number">255</span>, <span class="number">125</span>, <span class="number">64</span>&#125; &#125;;</span><br><span class="line">	colors-&gt;SetColor(<span class="string">&quot;SkinColor&quot;</span>, skinColor.data());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> reader = vtkSmartPointer&lt;vtkMetaImageReader&gt;::New();</span><br><span class="line">	reader-&gt;SetFileName(argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">	<span class="comment">// An isosurface, or contour value of 500 is known to correspond to the</span></span><br><span class="line">	<span class="comment">// skin of the patient.</span></span><br><span class="line">	<span class="keyword">auto</span> skinExtractor = vtkSmartPointer&lt;vtkMarchingCubes&gt;::New();</span><br><span class="line">	skinExtractor-&gt;SetInputConnection(reader-&gt;GetOutputPort());</span><br><span class="line">	skinExtractor-&gt;SetValue(<span class="number">0</span>, <span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// An isosurface, or contour value of 1150 is known to correspond to the</span></span><br><span class="line">	<span class="comment">// bone of the patient.</span></span><br><span class="line">	<span class="keyword">auto</span> boneExtractor = vtkSmartPointer&lt;vtkMarchingCubes&gt;::New();</span><br><span class="line">	boneExtractor-&gt;SetInputConnection(reader-&gt;GetOutputPort());</span><br><span class="line">	boneExtractor-&gt;SetValue(<span class="number">0</span>, <span class="number">1150</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// The triangle stripper is used to create triangle strips from the</span></span><br><span class="line">	<span class="comment">// isosurface; these render much faster on may systems.</span></span><br><span class="line">	<span class="keyword">auto</span> skinStripper = vtkSmartPointer&lt;vtkStripper&gt;::New();</span><br><span class="line">	skinStripper-&gt;SetInputConnection(skinExtractor-&gt;GetOutputPort());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> boneStripper = vtkSmartPointer&lt;vtkStripper&gt;::New();</span><br><span class="line">	boneStripper-&gt;SetInputConnection(boneExtractor-&gt;GetOutputPort());</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">	<span class="comment">// An isosurface, or contour value of 500 is known to correspond to the</span></span><br><span class="line">	<span class="comment">// skin of the patient.</span></span><br><span class="line">	<span class="keyword">auto</span> skinExtractor = vtkSmartPointer&lt;vtkContourFilter&gt;::New();</span><br><span class="line">	skinExtractor-&gt;SetInputConnection(reader-&gt;GetOutputPort());</span><br><span class="line">	skinExtractor-&gt;SetValue(<span class="number">0</span>, <span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// An isosurface, or contour value of 1150 is known to correspond to the</span></span><br><span class="line">	<span class="comment">// bone of the patient.</span></span><br><span class="line">	<span class="keyword">auto</span> boneExtractor = vtkSmartPointer&lt;vtkContourFilter&gt;::New();</span><br><span class="line">	boneExtractor-&gt;SetInputConnection(reader-&gt;GetOutputPort());</span><br><span class="line">	boneExtractor-&gt;SetValue(<span class="number">0</span>, <span class="number">1150</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> skinNormals = vtkSmartPointer&lt;vtkPolyDataNormals&gt;::New();</span><br><span class="line">	skinNormals-&gt;SetInputConnection(skinExtractor-&gt;GetOutputPort());</span><br><span class="line">	skinNormals-&gt;SetFeatureAngle(<span class="number">60.0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> boneNormals = vtkSmartPointer&lt;vtkPolyDataNormals&gt;::New();</span><br><span class="line">	boneNormals-&gt;SetInputConnection(boneExtractor-&gt;GetOutputPort());</span><br><span class="line">	boneNormals-&gt;SetFeatureAngle(<span class="number">60.0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// The triangle stripper is used to create triangle strips from the</span></span><br><span class="line">	<span class="comment">// isosurface; these render much faster on may systems.</span></span><br><span class="line">	<span class="keyword">auto</span> skinStripper = vtkSmartPointer&lt;vtkStripper&gt;::New();</span><br><span class="line">	skinStripper-&gt;SetInputConnection(skinNormals-&gt;GetOutputPort());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> boneStripper = vtkSmartPointer&lt;vtkStripper&gt;::New();</span><br><span class="line">	boneStripper-&gt;SetInputConnection(boneNormals-&gt;GetOutputPort());</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> skinMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();</span><br><span class="line">	skinMapper-&gt;SetInputConnection(skinStripper-&gt;GetOutputPort());</span><br><span class="line">	skinMapper-&gt;ScalarVisibilityOff();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">auto</span> boneMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();</span><br><span class="line">	boneMapper-&gt;SetInputConnection(boneStripper-&gt;GetOutputPort());</span><br><span class="line">	boneMapper-&gt;ScalarVisibilityOff();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> skin = vtkSmartPointer&lt;vtkActor&gt;::New();</span><br><span class="line">	skin-&gt;SetMapper(skinMapper);</span><br><span class="line">	skin-&gt;GetProperty()-&gt;SetDiffuseColor(colors-&gt;GetColor3d(<span class="string">&quot;SkinColor&quot;</span>).GetData());</span><br><span class="line">	skin-&gt;GetProperty()-&gt;SetSpecular(<span class="number">.3</span>);</span><br><span class="line">	skin-&gt;GetProperty()-&gt;SetSpecularPower(<span class="number">20</span>);</span><br><span class="line">	skin-&gt;GetProperty()-&gt;SetOpacity(<span class="number">.5</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> bone = vtkSmartPointer&lt;vtkActor&gt;::New();</span><br><span class="line">	bone-&gt;SetMapper(boneMapper);</span><br><span class="line">	bone-&gt;GetProperty()-&gt;SetDiffuseColor(colors-&gt;GetColor3d(<span class="string">&quot;Ivory&quot;</span>).GetData());</span><br><span class="line"></span><br><span class="line">	<span class="comment">// An outline provides context around the data.</span></span><br><span class="line">	<span class="keyword">auto</span> outlineData = vtkSmartPointer&lt;vtkOutlineFilter&gt;::New();</span><br><span class="line">	outlineData-&gt;SetInputConnection(reader-&gt;GetOutputPort());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> outlineMapper = vtkSmartPointer&lt;vtkPolyDataMapper&gt;::New();</span><br><span class="line">	outlineMapper-&gt;SetInputConnection(outlineData-&gt;GetOutputPort());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> outline = vtkSmartPointer&lt;vtkActor&gt;::New();</span><br><span class="line">	outline-&gt;SetMapper(outlineMapper);</span><br><span class="line">	outline-&gt;GetProperty()-&gt;SetColor(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> renderer = vtkSmartPointer&lt;vtkRenderer&gt;::New();</span><br><span class="line">	renderer-&gt;AddActor(skin);</span><br><span class="line">	renderer-&gt;AddActor(bone);</span><br><span class="line">	renderer-&gt;AddActor(outline);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> renWindow = vtkSmartPointer&lt;vtkRenderWindow&gt;::New();</span><br><span class="line">	renWindow-&gt;SetSize(<span class="number">640</span>, <span class="number">480</span>);</span><br><span class="line">	renWindow-&gt;AddRenderer(renderer);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> interactor = vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::New();</span><br><span class="line">	interactor-&gt;SetRenderWindow(renWindow);</span><br><span class="line"></span><br><span class="line">	renWindow-&gt;Render();</span><br><span class="line">	interactor-&gt;Initialize();</span><br><span class="line">	interactor-&gt;Start();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%AD%89%E5%80%BC%E6%9B%B2%E9%9D%A2">等值曲面</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%AD%89%E5%80%BC%E9%9D%A2">等值面</a><br><a target="_blank" rel="noopener" href="https://vtk.org/doc/nightly/html/classvtkMarchingCubes.html">vtkMarchingCubes Class Reference</a><br><a target="_blank" rel="noopener" href="https://vtk.org/doc/nightly/html/classvtkContourFilter.html">vtkContourFilter Class Reference</a><br><a target="_blank" rel="noopener" href="https://lorensen.github.io/VTKExamples/site/Cxx/Medical/MedicalDemo2/">VTKExamples/Cxx/Medical/MedicalDemo2</a><br><a target="_blank" rel="noopener" href="http://www.cs.carleton.edu/cs_comps/0405/shape/marching_cubes.html">An Implementation of the Marching Cubes[1] Algorithm</a><br><img src="https://img-blog.csdnimg.cn/20200119112703319.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VTK/" rel="tag"># VTK</a>
+              <a href="/tags/%E7%AD%89%E5%80%BC%E9%9D%A2/" rel="tag"># 等值面</a>
+              <a href="/tags/Marching-Cubes/" rel="tag"># Marching Cubes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E7%9A%84%E5%88%87%E7%89%87%E6%8F%90%E5%8F%96(vtkImageReslice)/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E9%85%8D%E5%87%86%EF%BC%88Landmark%EF%BC%89/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyJMR</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+</body>
+</html>
