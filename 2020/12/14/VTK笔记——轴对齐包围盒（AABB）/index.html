@@ -25,7 +25,7 @@
   </script>
 <meta name="description" content="什么是包围盒包围盒是指能够包容物体的立方体或者二维长方形，是包围体的一种，常常用于模型的碰撞检测。包围体主要包括球体、轴对齐包围盒(AABB)、有向包围盒(OBB)和凸包(Convex Hull)。在较早的时候，包围盒按照坐标系的坐标轴进行排列，这被称为轴对齐的包围盒(AABB&#x2F;Axis-aligned bounding box)。为了将AABB与通用的情况区分开来，将任意的包围盒称为有向包围盒(">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AndyJMR&#39;s Blog">
+<meta property="og:title" content="VTK笔记——轴对齐包围盒（AABB）">
 <meta property="og:url" content="http://example.com/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E8%BD%B4%E5%AF%B9%E9%BD%90%E5%8C%85%E5%9B%B4%E7%9B%92%EF%BC%88AABB%EF%BC%89/index.html">
 <meta property="og:site_name" content="AndyJMR&#39;s Blog">
 <meta property="og:description" content="什么是包围盒包围盒是指能够包容物体的立方体或者二维长方形，是包围体的一种，常常用于模型的碰撞检测。包围体主要包括球体、轴对齐包围盒(AABB)、有向包围盒(OBB)和凸包(Convex Hull)。在较早的时候，包围盒按照坐标系的坐标轴进行排列，这被称为轴对齐的包围盒(AABB&#x2F;Axis-aligned bounding box)。为了将AABB与通用的情况区分开来，将任意的包围盒称为有向包围盒(">
@@ -33,12 +33,12 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190605134407585.gif">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190605134455113.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-12-14T05:28:25.529Z">
-<meta property="article:modified_time" content="2020-01-19T06:38:24.102Z">
+<meta property="article:modified_time" content="2020-12-14T06:48:17.557Z">
 <meta property="article:author" content="AndyJMR">
 <meta property="article:tag" content="VTK">
 <meta property="article:tag" content="box">
-<meta property="article:tag" content="AABB">
 <meta property="article:tag" content="包围盒">
+<meta property="article:tag" content="AABB">
 <meta property="article:tag" content="bound">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190605134407585.gif">
@@ -56,7 +56,7 @@
     lang   : 'en'
   };
 </script>
-<title> | AndyJMR's Blog</title>
+<title>VTK笔记——轴对齐包围盒（AABB） | AndyJMR's Blog</title>
   
 
 
@@ -230,7 +230,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          VTK笔记——轴对齐包围盒（AABB）
         </h1>
 
         <div class="post-meta-container">
@@ -240,16 +240,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2020-12-14 13:28:25" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
+      <time title="Created: 2020-12-14 13:28:25 / Modified: 14:48:17" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-01-19 14:38:24" itemprop="dateModified" datetime="2020-01-19T14:38:24+08:00">2020-01-19</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -293,8 +287,8 @@
           <div class="post-tags">
               <a href="/tags/VTK/" rel="tag"># VTK</a>
               <a href="/tags/box/" rel="tag"># box</a>
-              <a href="/tags/AABB/" rel="tag"># AABB</a>
               <a href="/tags/%E5%8C%85%E5%9B%B4%E7%9B%92/" rel="tag"># 包围盒</a>
+              <a href="/tags/AABB/" rel="tag"># AABB</a>
               <a href="/tags/bound/" rel="tag"># bound</a>
           </div>
 
@@ -302,13 +296,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E6%9C%89%E5%90%91%E5%8C%85%E5%9B%B4%E7%9B%92%EF%BC%88OBB%EF%BC%89/" rel="prev" title="">
-                  <i class="fa fa-chevron-left"></i> 
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E6%9C%89%E5%90%91%E5%8C%85%E5%9B%B4%E7%9B%92%EF%BC%88OBB%EF%BC%89/" rel="prev" title="VTK笔记——有向包围盒（OBB）">
+                  <i class="fa fa-chevron-left"></i> VTK笔记——有向包围盒（OBB）
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/12/14/%E5%90%91%E9%87%8F%E5%8F%89%E7%A7%AF(Cross%20product)%E7%9A%84%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89%E5%8F%8A%E5%BA%94%E7%94%A8/" rel="next" title="">
-                   <i class="fa fa-chevron-right"></i>
+                <a href="/2020/12/14/%E5%90%91%E9%87%8F%E5%8F%89%E7%A7%AF(Cross%20product)%E7%9A%84%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89%E5%8F%8A%E5%BA%94%E7%94%A8/" rel="next" title="向量叉积(Cross product)的几何意义及应用">
+                  向量叉积(Cross product)的几何意义及应用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

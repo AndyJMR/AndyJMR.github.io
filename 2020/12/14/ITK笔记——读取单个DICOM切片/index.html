@@ -25,7 +25,7 @@
   </script>
 <meta name="description" content="什么是DICOMDICOM(Digital imaging and Communication in Medicine)，医学数字成像与通信，它是一个国际标准(ISO 12052)，由美国放射学院(ACR)和国家电气制造协会(NEMA)在1970年代共同制定，旨在统一格式，解决医学图像的处理、存储、打印以及传输。 GDCMGDCM(Grassroots DICOM)，开源库，DICOM标准的一种实">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AndyJMR&#39;s Blog">
+<meta property="og:title" content="ITK笔记——读取单个DICOM切片">
 <meta property="og:url" content="http://example.com/2020/12/14/ITK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E8%AF%BB%E5%8F%96%E5%8D%95%E4%B8%AADICOM%E5%88%87%E7%89%87/index.html">
 <meta property="og:site_name" content="AndyJMR&#39;s Blog">
 <meta property="og:description" content="什么是DICOMDICOM(Digital imaging and Communication in Medicine)，医学数字成像与通信，它是一个国际标准(ISO 12052)，由美国放射学院(ACR)和国家电气制造协会(NEMA)在1970年代共同制定，旨在统一格式，解决医学图像的处理、存储、打印以及传输。 GDCMGDCM(Grassroots DICOM)，开源库，DICOM标准的一种实">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190915174435856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190915175313436.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-12-14T05:28:25.386Z">
-<meta property="article:modified_time" content="2019-12-27T07:50:00.653Z">
+<meta property="article:modified_time" content="2020-12-14T06:46:32.625Z">
 <meta property="article:author" content="AndyJMR">
 <meta property="article:tag" content="ITK">
 <meta property="article:tag" content="VTK">
@@ -56,7 +56,7 @@
     lang   : 'en'
   };
 </script>
-<title> | AndyJMR's Blog</title>
+<title>ITK笔记——读取单个DICOM切片 | AndyJMR's Blog</title>
   
 
 
@@ -230,7 +230,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          ITK笔记——读取单个DICOM切片
         </h1>
 
         <div class="post-meta-container">
@@ -240,16 +240,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2020-12-14 13:28:25" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
+      <time title="Created: 2020-12-14 13:28:25 / Modified: 14:46:32" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2019-12-27 15:50:00" itemprop="dateModified" datetime="2019-12-27T15:50:00+08:00">2019-12-27</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -313,8 +307,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/12/14/ITK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E8%AF%BB%E5%8F%96%E5%A4%9A%E5%B8%A7DICOM%E5%9B%BE%E5%83%8F/" rel="next" title="">
-                   <i class="fa fa-chevron-right"></i>
+                <a href="/2020/12/14/ITK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E8%AF%BB%E5%8F%96%E5%A4%9A%E5%B8%A7DICOM%E5%9B%BE%E5%83%8F/" rel="next" title="ITK笔记——读取多帧DICOM图像">
+                  ITK笔记——读取多帧DICOM图像 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

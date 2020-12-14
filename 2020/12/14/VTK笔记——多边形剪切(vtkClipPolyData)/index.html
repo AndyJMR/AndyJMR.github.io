@@ -25,7 +25,7 @@
   </script>
 <meta name="description" content="在三维图形中，往往会涉及到对多边形的处理，多边形剪切就是其中之一。什么是多边形剪切？打个比方，如果把多边形比作西瓜的话，那剪切就相当于用水果刀切西瓜，一刀下去，西瓜就被切成两块。当然，也可以切两下，三下，甚至更多。 vtkClipPolyDatavtkClipPolyData，一个用于多边形剪切模型的方法类。关于它的用法，引用一段描述：  clip polygonal data with user">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AndyJMR&#39;s Blog">
+<meta property="og:title" content="VTK笔记——多边形剪切(vtkClipPolyData)">
 <meta property="og:url" content="http://example.com/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%A4%9A%E8%BE%B9%E5%BD%A2%E5%89%AA%E5%88%87(vtkClipPolyData)/index.html">
 <meta property="og:site_name" content="AndyJMR&#39;s Blog">
 <meta property="og:description" content="在三维图形中，往往会涉及到对多边形的处理，多边形剪切就是其中之一。什么是多边形剪切？打个比方，如果把多边形比作西瓜的话，那剪切就相当于用水果刀切西瓜，一刀下去，西瓜就被切成两块。当然，也可以切两下，三下，甚至更多。 vtkClipPolyDatavtkClipPolyData，一个用于多边形剪切模型的方法类。关于它的用法，引用一段描述：  clip polygonal data with user">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191213113001241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190328100418987.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-12-14T05:28:25.426Z">
-<meta property="article:modified_time" content="2020-01-19T06:41:07.877Z">
+<meta property="article:modified_time" content="2020-12-14T06:46:59.521Z">
 <meta property="article:author" content="AndyJMR">
 <meta property="article:tag" content="VTK">
 <meta property="article:tag" content="vtkClipPolyData">
@@ -57,7 +57,7 @@
     lang   : 'en'
   };
 </script>
-<title> | AndyJMR's Blog</title>
+<title>VTK笔记——多边形剪切(vtkClipPolyData) | AndyJMR's Blog</title>
   
 
 
@@ -231,7 +231,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          VTK笔记——多边形剪切(vtkClipPolyData)
         </h1>
 
         <div class="post-meta-container">
@@ -241,16 +241,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2020-12-14 13:28:25" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
+      <time title="Created: 2020-12-14 13:28:25 / Modified: 14:46:59" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-01-19 14:41:07" itemprop="dateModified" datetime="2020-01-19T14:41:07+08:00">2020-01-19</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -316,13 +310,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Widget%E7%AE%80%E4%BB%8B/" rel="prev" title="">
-                  <i class="fa fa-chevron-left"></i> 
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94Widget%E7%AE%80%E4%BB%8B/" rel="prev" title="VTK笔记——Widget简介">
+                  <i class="fa fa-chevron-left"></i> VTK笔记——Widget简介
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%A4%9A%E8%BE%B9%E5%BD%A2%E5%89%AA%E5%88%87(vtkSelectPolyData)/" rel="next" title="">
-                   <i class="fa fa-chevron-right"></i>
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%A4%9A%E8%BE%B9%E5%BD%A2%E5%89%AA%E5%88%87(vtkSelectPolyData)/" rel="next" title="VTK笔记——多边形剪切(vtkSelectPolyData)">
+                  VTK笔记——多边形剪切(vtkSelectPolyData) <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

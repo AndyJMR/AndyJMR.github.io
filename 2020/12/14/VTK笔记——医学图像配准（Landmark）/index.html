@@ -25,7 +25,7 @@
   </script>
 <meta name="description" content="随着现代医学的迅速发展，医学影像学为临床诊断提供了多种模态的医学图像，如X射线，CT，MRI等，当然，他们各自有各自的诊断优势。不过，有时候，医生希望将不同图像信息进行适当的集成。然而不同模态的医学图像成像原理不同，风辨率，成像参数却不相同，因此在图像融合前必须进行图像匹配。 医学图像配准就是通过寻找一种（或一系列）的空间变换（旋转、偏移、缩放和变形等），使两幅图像的对应点达到空间位置和解剖结构上">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AndyJMR&#39;s Blog">
+<meta property="og:title" content="VTK笔记——医学图像配准（Landmark）">
 <meta property="og:url" content="http://example.com/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E9%85%8D%E5%87%86%EF%BC%88Landmark%EF%BC%89/index.html">
 <meta property="og:site_name" content="AndyJMR&#39;s Blog">
 <meta property="og:description" content="随着现代医学的迅速发展，医学影像学为临床诊断提供了多种模态的医学图像，如X射线，CT，MRI等，当然，他们各自有各自的诊断优势。不过，有时候，医生希望将不同图像信息进行适当的集成。然而不同模态的医学图像成像原理不同，风辨率，成像参数却不相同，因此在图像融合前必须进行图像匹配。 医学图像配准就是通过寻找一种（或一系列）的空间变换（旋转、偏移、缩放和变形等），使两幅图像的对应点达到空间位置和解剖结构上">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200108084002895.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200108084046881.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-12-14T05:28:25.508Z">
-<meta property="article:modified_time" content="2020-01-13T02:08:40.657Z">
+<meta property="article:modified_time" content="2020-12-14T06:47:58.555Z">
 <meta property="article:author" content="AndyJMR">
 <meta property="article:tag" content="VTK">
 <meta property="article:tag" content="图像">
@@ -55,7 +55,7 @@
     lang   : 'en'
   };
 </script>
-<title> | AndyJMR's Blog</title>
+<title>VTK笔记——医学图像配准（Landmark） | AndyJMR's Blog</title>
   
 
 
@@ -229,7 +229,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          VTK笔记——医学图像配准（Landmark）
         </h1>
 
         <div class="post-meta-container">
@@ -239,16 +239,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2020-12-14 13:28:25" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
+      <time title="Created: 2020-12-14 13:28:25 / Modified: 14:47:58" itemprop="dateCreated datePublished" datetime="2020-12-14T13:28:25+08:00">2020-12-14</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-01-13 10:08:40" itemprop="dateModified" datetime="2020-01-13T10:08:40+08:00">2020-01-13</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -303,13 +297,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E7%AD%89%E5%80%BC%E9%9D%A2%E6%8F%90%E5%8F%96%EF%BC%88Marching%20Cubes%EF%BC%89/" rel="prev" title="">
-                  <i class="fa fa-chevron-left"></i> 
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E7%AD%89%E5%80%BC%E9%9D%A2%E6%8F%90%E5%8F%96%EF%BC%88Marching%20Cubes%EF%BC%89/" rel="prev" title="VTK笔记——医学图像等值面提取（Marching Cubes）">
+                  <i class="fa fa-chevron-left"></i> VTK笔记——医学图像等值面提取（Marching Cubes）
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E6%9C%89%E5%90%91%E5%8C%85%E5%9B%B4%E7%9B%92%EF%BC%88OBB%EF%BC%89/" rel="next" title="">
-                   <i class="fa fa-chevron-right"></i>
+                <a href="/2020/12/14/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E6%9C%89%E5%90%91%E5%8C%85%E5%9B%B4%E7%9B%92%EF%BC%88OBB%EF%BC%89/" rel="next" title="VTK笔记——有向包围盒（OBB）">
+                  VTK笔记——有向包围盒（OBB） <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
