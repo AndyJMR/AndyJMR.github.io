@@ -18,10 +18,11 @@
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="这篇笔记和之前的一篇笔记，VTK笔记——多边形剪切(vtkClipPolyData)，都是关于多边形处理的，但不同的是后者是用封闭的点线来剪切。点线剪切可以在多边形上任意剪切掉一部分，显得比较灵活，就像下面示意这样。A)可以在多边形的中间剪出一个洞，B)也可在多边形边缘剪掉一块。 我们知道，多边形是由点(points)和面片(cells)组成的。剪切的本身就是对多边形的这些数据进行处理。而在实际应">
 <meta property="og:type" content="article">
@@ -37,10 +38,10 @@
 <meta property="article:modified_time" content="2020-12-15T09:50:32.996Z">
 <meta property="article:author" content="AndyJMR">
 <meta property="article:tag" content="VTK">
-<meta property="article:tag" content="vtkSelectPolyData">
 <meta property="article:tag" content="剪切">
-<meta property="article:tag" content="标量">
 <meta property="article:tag" content="多边形">
+<meta property="article:tag" content="vtkSelectPolyData">
+<meta property="article:tag" content="标量">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190328154020420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
 
@@ -430,10 +431,10 @@
 
           <div class="post-tags">
               <a href="/tags/VTK/" rel="tag"># VTK</a>
-              <a href="/tags/vtkSelectPolyData/" rel="tag"># vtkSelectPolyData</a>
               <a href="/tags/%E5%89%AA%E5%88%87/" rel="tag"># 剪切</a>
-              <a href="/tags/%E6%A0%87%E9%87%8F/" rel="tag"># 标量</a>
               <a href="/tags/%E5%A4%9A%E8%BE%B9%E5%BD%A2/" rel="tag"># 多边形</a>
+              <a href="/tags/vtkSelectPolyData/" rel="tag"># vtkSelectPolyData</a>
+              <a href="/tags/%E6%A0%87%E9%87%8F/" rel="tag"># 标量</a>
           </div>
 
         
@@ -544,7 +545,10 @@
   </footer>
 
   
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
   <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
