@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto+Slab:300,300italic,400,400italic,700,700italic|PT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"algolia":{"appID":"6T62J2F3GE","indexName":"indexName","hits":{"per_page":10}}};
+  </script>
+<meta name="description" content="这篇笔记详细说明了vtk.js项目是如何搭建的，旨在快速入手工程搭建，享受web vtk的快乐人生。   一.环境首先，我们需要安装js的运行环境Node.js和npm：从Node.js官网可以看到目前最新的版本是15.4.0，为了兼容，我们就选择推荐的14.15.1版本。在Windows上安装需选择全部组件，包括Add to PATH.安装完成后，可通过node -v命令查看结果：  $ nod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VTK笔记——vtk.js工程搭建">
+<meta property="og:url" content="http://example.com/2020/12/15/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94vtk.js%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="AndyJMR&#39;s Blog">
+<meta property="og:description" content="这篇笔记详细说明了vtk.js项目是如何搭建的，旨在快速入手工程搭建，享受web vtk的快乐人生。   一.环境首先，我们需要安装js的运行环境Node.js和npm：从Node.js官网可以看到目前最新的版本是15.4.0，为了兼容，我们就选择推荐的14.15.1版本。在Windows上安装需选择全部组件，包括Add to PATH.安装完成后，可通过node -v命令查看结果：  $ nod">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020121113412814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201211143114603.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201211143308963.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201211145859852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201211165727507.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201211170348928.gif">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201211170522570.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-12-15T01:29:17.160Z">
+<meta property="article:modified_time" content="2020-12-15T05:11:40.976Z">
+<meta property="article:author" content="AndyJMR">
+<meta property="article:tag" content="VTK">
+<meta property="article:tag" content="vtk.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2020121113412814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70">
+
+
+<link rel="canonical" href="http://example.com/2020/12/15/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94vtk.js%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>VTK笔记——vtk.js工程搭建 | AndyJMR's Blog</title>
+  
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a735f8df830ee11dac6bfeec912328eb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">AndyJMR's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80-%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">一.环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C-%E5%88%9B%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">二.创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%88%9B%E5%BB%BA%E5%B7%A5%E7%A8%8B%E4%B8%BB%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">1.创建工程主目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text">2.初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85vtk-js%E5%8F%8A%E5%85%B6%E4%BE%9D%E8%B5%96%E9%A1%B9"><span class="nav-number">2.3.</span> <span class="nav-text">3.安装vtk.js及其依赖项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEwebpack"><span class="nav-number">2.4.</span> <span class="nav-text">4.安装和配置webpack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%96%B0%E5%BB%BA-webpack-config-js"><span class="nav-number">2.5.</span> <span class="nav-text">5.新建.&#x2F;webpack.config.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E4%BF%AE%E6%94%B9package-json"><span class="nav-number">2.6.</span> <span class="nav-text">6.修改package.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.7.</span> <span class="nav-text">7.创建应用实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E6%8E%A7%E5%88%B6%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.8.</span> <span class="nav-text">8.控制模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E7%94%A8%E4%BA%8E%E5%8A%A0%E8%BD%BD%E7%94%9F%E6%88%90%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9A%84%E4%B8%BBweb%E9%A1%B5%E9%9D%A2"><span class="nav-number">2.9.</span> <span class="nav-text">9.用于加载生成的应用程序的主web页面</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89-%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">三. 编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B-%E5%90%AF%E5%8A%A8"><span class="nav-number">4.</span> <span class="nav-text">四. 启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94-%E6%95%88%E6%9E%9C"><span class="nav-number">5.</span> <span class="nav-text">五.效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ref"><span class="nav-number">6.</span> <span class="nav-text">Ref</span></a></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">AndyJMR</p>
+  <div class="site-description" itemprop="description">不积跬步，无以至千里；不积小流，无以成江海。</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyJMR" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;AndyJMR" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/minmindianzi" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;minmindianzi" rel="noopener" target="_blank"><i class="fab fa-internet-explorer fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/15/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94vtk.js%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="AndyJMR">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyJMR's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VTK笔记——vtk.js工程搭建
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-12-15 09:29:17 / Modified: 13:11:40" itemprop="dateCreated datePublished" datetime="2020-12-15T09:29:17+08:00">2020-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/VTK%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">VTK笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2020/12/15/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94vtk.js%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/" class="post-meta-item leancloud_visitors" data-flag-title="VTK笔记——vtk.js工程搭建" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2020/12/15/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94vtk.js%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/15/VTK笔记——vtk.js工程搭建/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>这篇笔记详细说明了vtk.js项目是如何搭建的，旨在快速入手工程搭建，享受web vtk的快乐人生。</p>
+<!--有关vtk.js的介绍，可以参考《》。-->
+
+<h1 id="一-环境"><a href="#一-环境" class="headerlink" title="一.环境"></a>一.环境</h1><p>首先，我们需要安装js的运行环境<strong>Node.js</strong>和<strong>npm</strong>：<br><img src="https://img-blog.csdnimg.cn/2020121113412814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>从<a target="_blank" rel="noopener" href="https://nodejs.org/en/">Node.js官网</a>可以看到目前最新的版本是15.4.0，为了兼容，我们就选择推荐的14.15.1版本。<br>在Windows上安装需选择全部组件，包括Add to PATH.<br>安装完成后，可通过node -v命令查看结果：</p>
+<blockquote>
+<p>$ node -v<br>v14.15.1</p>
+</blockquote>
+<p>npm, node package manager, 即Node.js的包管理器。这个东西很强大，它在Node.js安装的时候就顺带安装好了，也可以通过npm -v命令查看：</p>
+<blockquote>
+<p>$ npm -v<br>6.14.8</p>
+</blockquote>
+<h1 id="二-创建"><a href="#二-创建" class="headerlink" title="二.创建"></a>二.创建</h1><p>Ok, 接下来我们来创建一个工程，看看它的结构如何。</p>
+<h2 id="1-创建工程主目录"><a href="#1-创建工程主目录" class="headerlink" title="1.创建工程主目录"></a>1.创建工程主目录</h2><blockquote>
+<p>$ mkdir MyVtkWebDemo</p>
+</blockquote>
+<blockquote>
+<p>$ cd MyVtkWebDemo/</p>
+</blockquote>
+<h2 id="2-初始化"><a href="#2-初始化" class="headerlink" title="2.初始化"></a>2.初始化</h2><blockquote>
+<p>$ npm init<br><img src="https://img-blog.csdnimg.cn/20201211143114603.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</blockquote>
+<h2 id="3-安装vtk-js及其依赖项"><a href="#3-安装vtk-js及其依赖项" class="headerlink" title="3.安装vtk.js及其依赖项"></a>3.安装<a target="_blank" rel="noopener" href="https://kitware.github.io/vtk-js/"><strong>vtk.js</strong></a>及其依赖项</h2><blockquote>
+<p>$ npm install vtk.js –save</p>
+</blockquote>
+<p>可通过命令查看包详细信息：</p>
+<blockquote>
+<p>$ npm info vtk.js<br><img src="https://img-blog.csdnimg.cn/20201211143308963.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</blockquote>
+<h2 id="4-安装和配置webpack"><a href="#4-安装和配置webpack" class="headerlink" title="4.安装和配置webpack"></a>4.安装和配置<a target="_blank" rel="noopener" href="https://webpack.js.org/"><strong>webpack</strong></a></h2><blockquote>
+<p>$ npm install –save-dev webpack</p>
+</blockquote>
+<p>查看包信息：</p>
+<blockquote>
+<p>$ npm info webpack<br><img src="https://img-blog.csdnimg.cn/20201211145859852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</blockquote>
+<p>从这里可以看出，webpack的版本为5.10.0，那还需要安装<a target="_blank" rel="noopener" href="https://webpack.js.org/api/cli/"><strong>CLI</strong></a>：</p>
+<blockquote>
+<p>$ npm install –save-dev webpack-cli</p>
+</blockquote>
+<h2 id="5-新建-webpack-config-js"><a href="#5-新建-webpack-config-js" class="headerlink" title="5.新建./webpack.config.js"></a>5.新建./webpack.config.js</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> vtkRules = <span class="built_in">require</span>(<span class="string">&#x27;vtk.js/Utilities/config/dependency.js&#x27;</span>).webpack.core.rules;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Optional if you want to load *.css and *.module.css files</span></span><br><span class="line"><span class="comment">// var cssRules = require(&#x27;vtk.js/Utilities/config/dependency.js&#x27;).webpack.css.rules;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> entry = path.join(__dirname, <span class="string">&#x27;./src/index.js&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> sourcePath = path.join(__dirname, <span class="string">&#x27;./src&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> outputPath = path.join(__dirname, <span class="string">&#x27;./dist&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: outputPath,</span><br><span class="line">    filename: <span class="string">&#x27;MyWebApp.js&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">        &#123; <span class="attr">test</span>: <span class="regexp">/\.html$/</span>, loader: <span class="string">&#x27;html-loader&#x27;</span> &#125;,</span><br><span class="line">    ].concat(vtkRules),</span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    modules: [</span><br><span class="line">      path.resolve(__dirname, <span class="string">&#x27;node_modules&#x27;</span>),</span><br><span class="line">      sourcePath,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="6-修改package-json"><a href="#6-修改package-json" class="headerlink" title="6.修改package.json"></a>6.修改package.json</h2><p>将scripts</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>替换为</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;build&quot;: &quot;webpack --config webpack.config.js&quot;,</span><br><span class="line">    &quot;build:release&quot;: &quot;webpack --progress --colors --mode production&quot;,</span><br><span class="line">    &quot;start&quot;: &quot;webpack serve --content-base ./dist&quot;,</span><br><span class="line">    &quot;commit&quot;: &quot;git cz&quot;,</span><br><span class="line">    &quot;semantic-release&quot;: &quot;semantic-release&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="7-创建应用实例"><a href="#7-创建应用实例" class="headerlink" title="7.创建应用实例"></a>7.创建应用实例</h2><p>./<strong>src</strong>/index.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> vtkFullScreenRenderWindow <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> vtkActor           <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Rendering/Core/Actor&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> vtkCalculator      <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Filters/General/Calculator&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> vtkConeSource      <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Filters/Sources/ConeSource&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> vtkMapper          <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Rendering/Core/Mapper&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; AttributeTypes &#125; <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Common/DataModel/DataSetAttributes/Constants&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; FieldDataTypes &#125; <span class="keyword">from</span> <span class="string">&#x27;vtk.js/Sources/Common/DataModel/DataSet/Constants&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> controlPanel <span class="keyword">from</span> <span class="string">&#x27;./controller.html&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ----------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// Standard rendering code setup</span></span><br><span class="line"><span class="comment">// ----------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();</span><br><span class="line"><span class="keyword">const</span> renderer = fullScreenRenderer.getRenderer();</span><br><span class="line"><span class="keyword">const</span> renderWindow = fullScreenRenderer.getRenderWindow();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ----------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// Example code</span></span><br><span class="line"><span class="comment">// ----------------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> coneSource = vtkConeSource.newInstance(&#123; <span class="attr">height</span>: <span class="number">1.0</span> &#125;);</span><br><span class="line"><span class="keyword">const</span> filter = vtkCalculator.newInstance();</span><br><span class="line"></span><br><span class="line">filter.setInputConnection(coneSource.getOutputPort());</span><br><span class="line">filter.setFormula(&#123;</span><br><span class="line">  getArrays: <span class="function"><span class="params">inputDataSets</span> =&gt;</span> (&#123;</span><br><span class="line">    input: [],</span><br><span class="line">    output: [</span><br><span class="line">      &#123; <span class="attr">location</span>: FieldDataTypes.CELL, <span class="attr">name</span>: <span class="string">&#x27;Random&#x27;</span>, <span class="attr">dataType</span>: <span class="string">&#x27;Float32Array&#x27;</span>, <span class="attr">attribute</span>: AttributeTypes.SCALARS &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;),</span><br><span class="line">  evaluate: <span class="function">(<span class="params">arraysIn, arraysOut</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> [scalars] = arraysOut.map(<span class="function"><span class="params">d</span> =&gt;</span> d.getData());</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; scalars.length; i++) &#123;</span><br><span class="line">      scalars[i] = <span class="built_in">Math</span>.random();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapper = vtkMapper.newInstance();</span><br><span class="line">mapper.setInputConnection(filter.getOutputPort());</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> actor = vtkActor.newInstance();</span><br><span class="line">actor.setMapper(mapper);</span><br><span class="line"></span><br><span class="line">renderer.addActor(actor);</span><br><span class="line">renderer.resetCamera();</span><br><span class="line">renderWindow.render();</span><br><span class="line"></span><br><span class="line"><span class="comment">// -----------------------------------------------------------</span></span><br><span class="line"><span class="comment">// UI control handling</span></span><br><span class="line"><span class="comment">// -----------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">fullScreenRenderer.addController(controlPanel);</span><br><span class="line"><span class="keyword">const</span> representationSelector = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.representations&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> resolutionChange = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;.resolution&#x27;</span>);</span><br><span class="line"></span><br><span class="line">representationSelector.addEventListener(<span class="string">&#x27;change&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> newRepValue = <span class="built_in">Number</span>(e.target.value);</span><br><span class="line">  actor.getProperty().setRepresentation(newRepValue);</span><br><span class="line">  renderWindow.render();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">resolutionChange.addEventListener(<span class="string">&#x27;input&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> resolution = <span class="built_in">Number</span>(e.target.value);</span><br><span class="line">  coneSource.setResolution(resolution);</span><br><span class="line">  renderWindow.render();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="8-控制模板"><a href="#8-控制模板" class="headerlink" title="8.控制模板"></a>8.控制模板</h2><p>./<strong>src</strong>/controller.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">select</span> <span class="attr">class</span>=<span class="string">&#x27;representations&#x27;</span> <span class="attr">style</span>=<span class="string">&quot;width: 100%&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;0&#x27;</span>&gt;</span>Points<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;1&#x27;</span>&gt;</span>Wireframe<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;2&#x27;</span> <span class="attr">selected</span>&gt;</span>Surface<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">class</span>=<span class="string">&#x27;resolution&#x27;</span> <span class="attr">type</span>=<span class="string">&#x27;range&#x27;</span> <span class="attr">min</span>=<span class="string">&#x27;4&#x27;</span> <span class="attr">max</span>=<span class="string">&#x27;80&#x27;</span> <span class="attr">value</span>=<span class="string">&#x27;6&#x27;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="9-用于加载生成的应用程序的主web页面"><a href="#9-用于加载生成的应用程序的主web页面" class="headerlink" title="9.用于加载生成的应用程序的主web页面"></a>9.用于加载生成的应用程序的主web页面</h2><p>./<strong>dist</strong>/index.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-type&quot;</span> <span class="attr">content</span>=<span class="string">&quot;text/html; charset=utf-8&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;MyWebApp.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="三-编译"><a href="#三-编译" class="headerlink" title="三. 编译"></a>三. 编译</h1><p>到这里，我们就可以编译工程了。</p>
+<blockquote>
+<p>$ npm run build</p>
+</blockquote>
+<p>看看./dist下面是否生成了应用文件。</p>
+<blockquote>
+<p>$ ll dist/<br><img src="https://img-blog.csdnimg.cn/20201211165727507.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h1 id="四-启动"><a href="#四-启动" class="headerlink" title="四. 启动"></a>四. 启动</h1><p>最后，完事具备，只欠东风。</p>
+<blockquote>
+<p>$ npm start</p>
+</blockquote>
+<h1 id="五-效果"><a href="#五-效果" class="headerlink" title="五.效果"></a>五.效果</h1><p>有浏览器打开**<a target="_blank" rel="noopener" href="http://localhost:8080/**%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%9C%8B%E7%BB%93%E6%9E%9C%E4%BA%86%E3%80%82%E6%AD%A4%E6%97%B6%E6%AD%A4%E5%88%BB%EF%BC%8C%E6%AD%A4%E6%83%85%E6%AD%A4%E6%99%AF%EF%BC%8C%E4%BD%A0%E5%8F%AF%E4%BB%A5%E5%8A%A0%E4%B8%AA%E9%B8%A1%E8%85%BF%E4%BA%86%EF%BC%81">http://localhost:8080/**，就可以看结果了。此时此刻，此情此景，你可以加个鸡腿了！</a><br><img src="https://img-blog.csdnimg.cn/20201211170348928.gif" alt="在这里插入图片描述"></p>
+<h1 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h1><p><a target="_blank" rel="noopener" href="https://kitware.github.io/vtk-js/docs/intro_vtk_as_es6_dependency.html">Using vtk.js as an ES6 dependency</a><br><img src="https://img-blog.csdnimg.cn/20201211170522570.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbm1pbmRpYW56aQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VTK/" rel="tag"># VTK</a>
+              <a href="/tags/vtk-js/" rel="tag"># vtk.js</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/14/%E5%90%91%E9%87%8F%E7%82%B9%E4%B9%98%EF%BC%88%E5%86%85%E7%A7%AF%EF%BC%89%E5%92%8C%E5%8F%89%E4%B9%98%EF%BC%88%E5%A4%96%E7%A7%AF%E3%80%81%E5%90%91%E9%87%8F%E7%A7%AF%EF%BC%89%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyJMR</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4.8.2/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4.8.7/dist/instantsearch.production.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      const visitors = document.querySelector('.leancloud_visitors');
+      const url = decodeURI(visitors.id);
+      const title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            const counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      const visitors = document.querySelectorAll('.leancloud_visitors');
+      const entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            const target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    const { app_id, app_key, server_url } = {"enable":true,"app_id":"a2YE7UNG6CpOcQJ3T3PhTOKT-gzGzoHsz","app_key":"3ARwkw15puLjE9cLL4d6FLhI","server_url":null,"security":true};
+    function fetchData(api_server) {
+      const Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    const api_server = app_id.slice(-9) === '-MdYXbMMI' ? `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com` : server_url;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://AndyJMR.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://example.com/2020/12/15/VTK%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94vtk.js%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA/";
+    this.page.identifier = "2020/12/15/VTK笔记——vtk.js工程搭建/";
+    this.page.title = "VTK笔记——vtk.js工程搭建";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://AndyJMR.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

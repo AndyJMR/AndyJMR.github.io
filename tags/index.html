@@ -21,7 +21,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"algolia":{"appID":"6T62J2F3GE","indexName":"indexName","hits":{"per_page":10}}};
   </script>
 <meta name="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
 <meta property="og:type" content="website">
@@ -126,6 +126,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -144,21 +145,33 @@
     <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
   </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
-
-  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
 
 </div>
         
@@ -195,9 +208,8 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">16</span>
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -209,8 +221,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-          
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -268,10 +279,10 @@
       
       <div class="post-body"><div class="tag-cloud">
   <div class="tag-cloud-title">
-    39 tags in total
+    40 tags in total
   </div>
   <div class="tag-cloud-tags">
-    <a href="/tags/AABB/" style="font-size: 12px;" class="tag-cloud-0">AABB</a> <a href="/tags/Cross-product/" style="font-size: 18px;" class="tag-cloud-3">Cross product</a> <a href="/tags/DICOM/" style="font-size: 24px;" class="tag-cloud-7">DICOM</a> <a href="/tags/ITK/" style="font-size: 18px;" class="tag-cloud-3">ITK</a> <a href="/tags/Interaction/" style="font-size: 12px;" class="tag-cloud-0">Interaction</a> <a href="/tags/Landmark/" style="font-size: 12px;" class="tag-cloud-0">Landmark</a> <a href="/tags/Marching-Cubes/" style="font-size: 12px;" class="tag-cloud-0">Marching Cubes</a> <a href="/tags/Representation/" style="font-size: 12px;" class="tag-cloud-0">Representation</a> <a href="/tags/VTK/" style="font-size: 30px;" class="tag-cloud-10">VTK</a> <a href="/tags/Widget/" style="font-size: 12px;" class="tag-cloud-0">Widget</a> <a href="/tags/bound/" style="font-size: 12px;" class="tag-cloud-0">bound</a> <a href="/tags/boundary/" style="font-size: 12px;" class="tag-cloud-0">boundary</a> <a href="/tags/box/" style="font-size: 18px;" class="tag-cloud-3">box</a> <a href="/tags/closed-surface/" style="font-size: 12px;" class="tag-cloud-0">closed surface</a> <a href="/tags/obb/" style="font-size: 12px;" class="tag-cloud-0">obb</a> <a href="/tags/picker/" style="font-size: 12px;" class="tag-cloud-0">picker</a> <a href="/tags/slice/" style="font-size: 18px;" class="tag-cloud-3">slice</a> <a href="/tags/vtkClipPolyData/" style="font-size: 12px;" class="tag-cloud-0">vtkClipPolyData</a> <a href="/tags/vtkFeatureEdges/" style="font-size: 12px;" class="tag-cloud-0">vtkFeatureEdges</a> <a href="/tags/vtkImageReslice/" style="font-size: 12px;" class="tag-cloud-0">vtkImageReslice</a> <a href="/tags/vtkImageViewer2/" style="font-size: 12px;" class="tag-cloud-0">vtkImageViewer2</a> <a href="/tags/vtkSelectPolyData/" style="font-size: 12px;" class="tag-cloud-0">vtkSelectPolyData</a> <a href="/tags/%E4%BA%A4%E4%BA%92/" style="font-size: 12px;" class="tag-cloud-0">交互</a> <a href="/tags/%E5%88%87%E7%89%87/" style="font-size: 12px;" class="tag-cloud-0">切片</a> <a href="/tags/%E5%89%AA%E5%88%87/" style="font-size: 18px;" class="tag-cloud-3">剪切</a> <a href="/tags/%E5%8C%85%E5%9B%B4%E7%9B%92/" style="font-size: 18px;" class="tag-cloud-3">包围盒</a> <a href="/tags/%E5%8F%89%E7%A7%AF/" style="font-size: 12px;" class="tag-cloud-0">叉积</a> <a href="/tags/%E5%90%91%E9%87%8F/" style="font-size: 12px;" class="tag-cloud-0">向量</a> <a href="/tags/%E5%9B%BE%E5%83%8F/" style="font-size: 18px;" class="tag-cloud-3">图像</a> <a href="/tags/%E5%A4%9A%E8%BE%B9%E5%BD%A2/" style="font-size: 18px;" class="tag-cloud-3">多边形</a> <a href="/tags/%E5%BA%8F%E5%88%97/" style="font-size: 18px;" class="tag-cloud-3">序列</a> <a href="/tags/%E6%8B%BE%E5%8F%96%E5%99%A8/" style="font-size: 12px;" class="tag-cloud-0">拾取器</a> <a href="/tags/%E6%8F%90%E5%8F%96/" style="font-size: 12px;" class="tag-cloud-0">提取</a> <a href="/tags/%E6%A0%87%E9%87%8F/" style="font-size: 12px;" class="tag-cloud-0">标量</a> <a href="/tags/%E7%AD%89%E5%80%BC%E9%9D%A2/" style="font-size: 12px;" class="tag-cloud-0">等值面</a> <a href="/tags/%E8%BE%B9%E7%95%8C/" style="font-size: 12px;" class="tag-cloud-0">边界</a> <a href="/tags/%E9%85%8D%E5%87%86/" style="font-size: 12px;" class="tag-cloud-0">配准</a> <a href="/tags/%E9%97%AD%E5%90%88/" style="font-size: 12px;" class="tag-cloud-0">闭合</a> <a href="/tags/%E9%9A%90%E5%87%BD%E6%95%B0/" style="font-size: 12px;" class="tag-cloud-0">隐函数</a>
+    <a href="/tags/AABB/" style="font-size: 12px;" class="tag-cloud-0">AABB</a> <a href="/tags/Cross-product/" style="font-size: 18px;" class="tag-cloud-3">Cross product</a> <a href="/tags/DICOM/" style="font-size: 24px;" class="tag-cloud-7">DICOM</a> <a href="/tags/ITK/" style="font-size: 18px;" class="tag-cloud-3">ITK</a> <a href="/tags/Interaction/" style="font-size: 12px;" class="tag-cloud-0">Interaction</a> <a href="/tags/Landmark/" style="font-size: 12px;" class="tag-cloud-0">Landmark</a> <a href="/tags/Marching-Cubes/" style="font-size: 12px;" class="tag-cloud-0">Marching Cubes</a> <a href="/tags/Representation/" style="font-size: 12px;" class="tag-cloud-0">Representation</a> <a href="/tags/VTK/" style="font-size: 30px;" class="tag-cloud-10">VTK</a> <a href="/tags/Widget/" style="font-size: 12px;" class="tag-cloud-0">Widget</a> <a href="/tags/bound/" style="font-size: 12px;" class="tag-cloud-0">bound</a> <a href="/tags/boundary/" style="font-size: 12px;" class="tag-cloud-0">boundary</a> <a href="/tags/box/" style="font-size: 18px;" class="tag-cloud-3">box</a> <a href="/tags/closed-surface/" style="font-size: 12px;" class="tag-cloud-0">closed surface</a> <a href="/tags/obb/" style="font-size: 12px;" class="tag-cloud-0">obb</a> <a href="/tags/picker/" style="font-size: 12px;" class="tag-cloud-0">picker</a> <a href="/tags/slice/" style="font-size: 18px;" class="tag-cloud-3">slice</a> <a href="/tags/vtk-js/" style="font-size: 12px;" class="tag-cloud-0">vtk.js</a> <a href="/tags/vtkClipPolyData/" style="font-size: 12px;" class="tag-cloud-0">vtkClipPolyData</a> <a href="/tags/vtkFeatureEdges/" style="font-size: 12px;" class="tag-cloud-0">vtkFeatureEdges</a> <a href="/tags/vtkImageReslice/" style="font-size: 12px;" class="tag-cloud-0">vtkImageReslice</a> <a href="/tags/vtkImageViewer2/" style="font-size: 12px;" class="tag-cloud-0">vtkImageViewer2</a> <a href="/tags/vtkSelectPolyData/" style="font-size: 12px;" class="tag-cloud-0">vtkSelectPolyData</a> <a href="/tags/%E4%BA%A4%E4%BA%92/" style="font-size: 12px;" class="tag-cloud-0">交互</a> <a href="/tags/%E5%88%87%E7%89%87/" style="font-size: 12px;" class="tag-cloud-0">切片</a> <a href="/tags/%E5%89%AA%E5%88%87/" style="font-size: 18px;" class="tag-cloud-3">剪切</a> <a href="/tags/%E5%8C%85%E5%9B%B4%E7%9B%92/" style="font-size: 18px;" class="tag-cloud-3">包围盒</a> <a href="/tags/%E5%8F%89%E7%A7%AF/" style="font-size: 12px;" class="tag-cloud-0">叉积</a> <a href="/tags/%E5%90%91%E9%87%8F/" style="font-size: 12px;" class="tag-cloud-0">向量</a> <a href="/tags/%E5%9B%BE%E5%83%8F/" style="font-size: 18px;" class="tag-cloud-3">图像</a> <a href="/tags/%E5%A4%9A%E8%BE%B9%E5%BD%A2/" style="font-size: 18px;" class="tag-cloud-3">多边形</a> <a href="/tags/%E5%BA%8F%E5%88%97/" style="font-size: 18px;" class="tag-cloud-3">序列</a> <a href="/tags/%E6%8B%BE%E5%8F%96%E5%99%A8/" style="font-size: 12px;" class="tag-cloud-0">拾取器</a> <a href="/tags/%E6%8F%90%E5%8F%96/" style="font-size: 12px;" class="tag-cloud-0">提取</a> <a href="/tags/%E6%A0%87%E9%87%8F/" style="font-size: 12px;" class="tag-cloud-0">标量</a> <a href="/tags/%E7%AD%89%E5%80%BC%E9%9D%A2/" style="font-size: 12px;" class="tag-cloud-0">等值面</a> <a href="/tags/%E8%BE%B9%E7%95%8C/" style="font-size: 12px;" class="tag-cloud-0">边界</a> <a href="/tags/%E9%85%8D%E5%87%86/" style="font-size: 12px;" class="tag-cloud-0">配准</a> <a href="/tags/%E9%97%AD%E5%90%88/" style="font-size: 12px;" class="tag-cloud-0">闭合</a> <a href="/tags/%E9%9A%90%E5%87%BD%E6%95%B0/" style="font-size: 12px;" class="tag-cloud-0">隐函数</a>
   </div>
 </div>
 
@@ -334,6 +345,8 @@
 
   
 
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4.8.2/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4.8.7/dist/instantsearch.production.min.js"></script><script src="/js/algolia-search.js"></script>
 
 
 
@@ -396,7 +409,7 @@
         });
     }
 
-    const { app_id, app_key, server_url } = {"enable":true,"app_id":"a2YE7UNG6CpOcQJ3T3PhTOKT-gzGzoHsz","app_key":"3ARwkw15puLjE9cLL4d6FLhI","server_url":null,"security":true,"betterPerformance":true};
+    const { app_id, app_key, server_url } = {"enable":true,"app_id":"a2YE7UNG6CpOcQJ3T3PhTOKT-gzGzoHsz","app_key":"3ARwkw15puLjE9cLL4d6FLhI","server_url":null,"security":true};
     function fetchData(api_server) {
       const Counter = (method, url, data) => {
         return fetch(`${api_server}/1.1${url}`, {
